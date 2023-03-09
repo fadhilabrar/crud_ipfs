@@ -42,13 +42,10 @@ export default function Create(props) {
   async function onSubmit(event) {
     event.preventDefault()
     console.log("Submitting file to ipfs...")
-    const startTime = Date.now();
     var file = await ipfs.add(buffer)
-    const msElapsed = Date.now() - startTime
-    console.log(`Response time ${name} size ${file.size} mb : ${msElapsed / 1000} seconds to complete.`)
     var hash = await props.contracts.methods.get().call()
     var lista = JSON.parse(hash)
-    var newList = lista.concat({ "name": name, "cid": file.path })
+    var newList = lista.concat({"name": name, "cid": file.path })
     var jsonList = JSON.stringify(newList)
     await props.contracts.methods.set(jsonList).send({ from: props.accounts })
     history.back()
